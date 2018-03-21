@@ -65,6 +65,7 @@ $("#candidate_other").change(
 );
 $("input#other_name").keyup(
   function() {
+    $("#candidate_other").prop("checked", true);
     mname = $("input#other_name").val();
     show_sample(mname);
   }
