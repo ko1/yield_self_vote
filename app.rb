@@ -7,7 +7,12 @@ Bundler.require
 DB = YAML::Store.new('vote_result.yaml')
 def vote_results
   results = DB.transaction{|db| db['result']}
-  results || %w(yield_self then transform apply do to l I map change alter yield in morph adopt alt tweak as).each_with_object({}){|e, r| r[e] = 0}
+  unless results
+    results = DB.transaction{|db|
+      db['result'] = %w(yield_self then transform apply do to l I map change alter yield in morph adopt alt tweak as).each_with_object({}){|e, r| r[e] = 0}
+    }
+  end
+  results
 end
 
 def update_vote_results name, val
