@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+
+<script type="text/javascript" src="jquery-latest.js"></script>
+</head>
+
+<body>
+<div id="message">
+<%=h @message %>
+</div>
+
+<form method='post' action='/'>
+<div>
+  <% @list.sort_by{|name, num| -num}.each_with_index{|(name, num), i| %>
+    <input class='candidate' type='radio' name='name' value='<%= name %>' <%= i == 0 ? 'checked' : '' %>><%= name %>: <%= num %></input> <br/>
+  <% } %>
+  <input id="candidate_other" type='radio' name='name' value='_another_idea'>Another_idea: </input><input id="other_name" type='text' name='other' /><br/>
+</div>
+
+<input type='submit' />
+</form>
+
+<pre id='sample_code'>
+</pre>
+
+<p>
+Current sample code:
+<pre id='current_smaple_code'>
+# sample code
+
+construct_url
+  .yield_self { |url| Faraday.get(url) }.body
+  .yield_self { |response| JSON.parse(response) }
+  .dig('object', 'id')
+  .yield_self { |id| id || '<undefined>' }
+  .yield_self { |id| "server:#{id}" }
+</pre>
+</p>
+
+<script>
+var i = 0
+
+function show_sample(mname) {
+    text = $("#current_smaple_code").text();
+    text = text.replace(RegExp("yield_self", "g"), mname);
+    $("#sample_code").text(text);
+    $("#message").text(mname);
+}
+
+$(".candidate").mouseenter(
+  function() {
+    show_sample(this.value);
+  }
+);
+$("#candidate_other").mouseover(
+  function() {
+    mname = $("input#other_name").val();
+    if (mname) {
+      show_sample(mname);
+    }
+    else {
+      alert(mname);
+    }
+  }
+);
+$("input#other_name").keyup(
+  function() {
+    mname = $("input#other_name").val();
+    show_sample(mname);
+  }
+);
+
+
+$("div#message").html("xxx");
+</script>
+
+</body>
