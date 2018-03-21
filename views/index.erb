@@ -15,7 +15,7 @@
   <% @list.sort_by{|name, num| -num}.each_with_index{|(name, num), i| %>
     <input class='candidate' type='radio' name='name' value='<%= name %>' <%= i == 0 ? 'checked' : '' %>><%= name %>: <%= num %></input> <br/>
   <% } %>
-  <input id="candidate_other" type='radio' name='name' value='_another_idea'>Another_idea: </input><input id="other_name" type='text' name='other' /><br/>
+  <input id="candidate_other" type='radio' name='name' value='_another_idea'>Another idea: </input><input id="other_name" type='text' name='other' /><br/>
 </div>
 
 <input type='submit' />
@@ -25,7 +25,7 @@
 </pre>
 
 <p>
-Current sample code:
+Current sample code (quoted from <a href='https://zverok.github.io/blog/2018-01-24-yield_self.html'>yield_self is more awesome than you could think</a>):
 <pre id='current_smaple_code'>
 # sample code
 
@@ -45,22 +45,21 @@ function show_sample(mname) {
     text = $("#current_smaple_code").text();
     text = text.replace(RegExp("yield_self", "g"), mname);
     $("#sample_code").text(text);
-    $("#message").text(mname);
+    // $("#message").text(mname);
 }
 
-$(".candidate").mouseenter(
+$(".candidate").change(
   function() {
-    show_sample(this.value);
+    if (this.value) show_sample(this.value);
   }
 );
-$("#candidate_other").mouseover(
+$("#candidate_other").change(
   function() {
-    mname = $("input#other_name").val();
-    if (mname) {
-      show_sample(mname);
-    }
-    else {
-      alert(mname);
+    if (this.value) {
+      mname = $("input#other_name").val();
+      if (mname) {
+        show_sample(mname);
+      }
     }
   }
 );
@@ -70,9 +69,6 @@ $("input#other_name").keyup(
     show_sample(mname);
   }
 );
-
-
-$("div#message").html("xxx");
 </script>
 
 </body>
